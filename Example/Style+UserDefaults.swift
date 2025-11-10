@@ -3,7 +3,7 @@ import Settings
 
 // Helpers to write styles to and read them from UserDefaults.
 
-extension Settings.Style: RawRepresentable {
+extension Settings.Style: @retroactive RawRepresentable {
 	public var rawValue: Int {
 		switch self {
 		case .toolbarItems:
