@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
 	name: "Settings",
-    defaultLocalization: "en",
+	defaultLocalization: "en",
 	platforms: [
 		.macOS(.v10_13)
 	],
