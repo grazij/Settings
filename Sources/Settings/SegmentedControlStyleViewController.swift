@@ -52,14 +52,11 @@ final class SegmentedControlStyleViewController: NSViewController, SettingsStyle
 		let segmentSize: CGSize = {
 			let insets = CGSize(width: 36, height: 12)
 			var maxSize = CGSize.zero
+			let font = NSFont.systemFont(ofSize: NSFont.systemFontSize(for: .regular))
 
 			for pane in panes {
 				let title = pane.paneTitle
-				let titleSize = title.size(
-					withAttributes: [
-						.font: NSFont.systemFont(ofSize: NSFont.systemFontSize(for: .regular))
-					]
-				)
+				let titleSize = title.size(withAttributes: [.font: font])
 
 				maxSize = CGSize(
 					width: max(titleSize.width, maxSize.width),
