@@ -36,7 +36,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 
 		let toolbar = NSToolbar(identifier: "SettingsToolbar")
 		toolbar.allowsUserCustomization = false
-		toolbar.displayMode = .iconAndLabel
+		toolbar.displayMode = style == .segmentedControl ? .iconOnly : .iconAndLabel
 		toolbar.showsBaselineSeparator = true
 		toolbar.delegate = self
 
