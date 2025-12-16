@@ -72,7 +72,7 @@ public final class SettingsWindowController: NSWindowController {
 
 	@available(*, unavailable)
 	public required init?(coder: NSCoder) {
-		fatalError("init(coder:) is not supported, use init(panes:style:animated:hidesToolbarForSingleItem:hidesToolbarForSingleItem:)")
+		fatalError("init(coder:) is not supported, use init(panes:style:animated:hidesToolbarForSingleItem:)")
 	}
 
 
