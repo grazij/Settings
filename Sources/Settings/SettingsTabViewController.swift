@@ -143,11 +143,15 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 			from: fromViewController,
 			to: toViewController,
 			options: options
-		) { [self] in
+		) { [weak self] in
+			guard let self else {
+				return
+			}
+
 			if
-		   		isAnimated,
-		   		let toolbarItemStyleViewController = settingsStyleController as? ToolbarItemStyleViewController
-		   	{
+				isAnimated,
+				let toolbarItemStyleViewController = settingsStyleController as? ToolbarItemStyleViewController
+			{
 				toolbarItemStyleViewController.refreshPreviousSelectedItem()
 			}
 
