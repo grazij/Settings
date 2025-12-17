@@ -117,10 +117,28 @@ public final class SettingsWindowController: NSWindowController {
 			return
 		}
 
-		if !window.setFrameUsingName(.settings) {
+		let currentFrame = window.frame
+
+		// Try to restore saved position. If no saved frame exists, center the window.
+		if let savedFrame = Self.savedWindowFrame(for: .settings) {
+			// Only restore the origin (position), not the size.
+			// The size is determined by the active pane's content.
+			var newFrame = currentFrame
+			newFrame.origin.x = savedFrame.origin.x
+			// Adjust Y to keep the top-left corner anchored (macOS uses bottom-left origin)
+			newFrame.origin.y = savedFrame.maxY - currentFrame.height
+			window.setFrame(newFrame, display: false)
+		} else {
 			window.center()
 		}
 		window.setFrameAutosaveName(.settings)
+	}
+
+	private static func savedWindowFrame(for name: NSWindow.FrameAutosaveName) -> CGRect? {
+		guard let frameString = UserDefaults.standard.string(forKey: "NSWindow Frame \(name)") else {
+			return nil
+		}
+		return NSRectFromString(frameString)
 	}
 }
 
