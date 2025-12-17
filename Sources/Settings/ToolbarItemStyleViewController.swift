@@ -34,7 +34,7 @@ final class ToolbarItemStyleViewController: NSObject, SettingsStyleController {
 
 	func toolbarItem(paneIdentifier: Settings.PaneIdentifier) -> NSToolbarItem? {
 		guard let pane = (panes.first { $0.paneIdentifier == paneIdentifier }) else {
-			preconditionFailure()
+			preconditionFailure("Unknown pane identifier: \(paneIdentifier.rawValue)")
 		}
 
 		let toolbarItem = NSToolbarItem(itemIdentifier: paneIdentifier.toolbarItemIdentifier)
