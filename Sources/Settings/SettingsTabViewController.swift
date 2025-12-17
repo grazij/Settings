@@ -1,4 +1,4 @@
-import Cocoa
+import AppKit
 
 final class SettingsTabViewController: NSViewController, SettingsStyleControllerDelegate {
 	private var activeTab: Int?
