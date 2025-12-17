@@ -199,11 +199,12 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 					from: fromViewController,
 					to: toViewController,
 					options: options,
-					completionHandler: completion
+					completionHandler: { [weak self] in
+						completion?()
+						self?.pausableWindow?.isUserInteractionEnabled = true
+					}
 				)
-			}, completionHandler: { [weak self] in
-				self?.pausableWindow?.isUserInteractionEnabled = true
-			})
+			}, completionHandler: nil)
 		} else {
 			super.transition(
 				from: fromViewController,
