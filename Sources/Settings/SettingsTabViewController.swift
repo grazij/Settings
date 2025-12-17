@@ -21,7 +21,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 	var isAnimated = true
 
 	var activeViewController: NSViewController? {
-		guard let activeTab else {
+		guard let activeTab, activeTab >= 0, activeTab < panes.count else {
 			return nil
 		}
 
@@ -72,6 +72,11 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 	}
 
 	func activateTab(index: Int, animated: Bool) {
+		guard index >= 0, index < panes.count else {
+			assertionFailure("Tab index \(index) out of bounds (0..<\(panes.count))")
+			return
+		}
+
 		defer {
 			activeTab = index
 			settingsStyleController.selectTab(index: index)

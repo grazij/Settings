@@ -53,6 +53,10 @@ final class ToolbarItemStyleViewController: NSObject, SettingsStyleController {
 	}
 
 	func selectTab(index: Int) {
+		guard index >= 0, index < panes.count else {
+			assertionFailure("Tab index \(index) out of bounds (0..<\(panes.count))")
+			return
+		}
 		toolbar.selectedItemIdentifier = panes[index].toolbarItemIdentifier
 	}
 
