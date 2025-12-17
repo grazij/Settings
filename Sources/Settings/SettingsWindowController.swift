@@ -31,6 +31,7 @@ public final class SettingsWindowController: NSWindowController {
 		animated: Bool = true,
 		hidesToolbarForSingleItem: Bool = true
 	) {
+		dispatchPrecondition(condition: .onQueue(.main))
 		precondition(!panes.isEmpty, "You need to set at least one pane")
 
 		let window = SettingsWindow(
@@ -89,6 +90,8 @@ public final class SettingsWindowController: NSWindowController {
 	- See `showWindow(_:)` to show the window without the convenience of activating the app.
 	*/
 	public func show(pane paneIdentifier: Settings.PaneIdentifier? = nil) {
+		dispatchPrecondition(condition: .onQueue(.main))
+
 		if let paneIdentifier {
 			tabViewController.activateTab(paneIdentifier: paneIdentifier, animated: false)
 		} else {
