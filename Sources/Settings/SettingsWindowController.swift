@@ -64,6 +64,7 @@ public final class SettingsWindowController: NSWindowController {
 		tabViewController.isAnimated = animated
 		tabViewController.configure(panes: panes, style: style)
 		updateToolbarVisibility()
+		window.setFrameAutosaveName(.settings)
 	}
 
 	@available(*, unavailable)
@@ -108,8 +109,8 @@ public final class SettingsWindowController: NSWindowController {
 		NSApp.activate(ignoringOtherApps: true)
 		#endif
 
-		showWindow(self)
 		restoreWindowPosition()
+		showWindow(self)
 	}
 
 	private func restoreWindowPosition() {
@@ -127,11 +128,18 @@ public final class SettingsWindowController: NSWindowController {
 			newFrame.origin.x = savedFrame.origin.x
 			// Adjust Y to keep the top-left corner anchored (macOS uses bottom-left origin)
 			newFrame.origin.y = savedFrame.maxY - currentFrame.height
-			window.setFrame(newFrame, display: false)
+
+			// Verify the top-left corner is on a visible screen. If the display
+			// configuration changed, the saved position may be off-screen.
+			let topLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
+			if Self.isPointOnScreen(topLeft) {
+				window.setFrame(newFrame, display: false)
+			} else {
+				window.center()
+			}
 		} else {
 			window.center()
 		}
-		window.setFrameAutosaveName(.settings)
 	}
 
 	private static func savedWindowFrame(for name: NSWindow.FrameAutosaveName) -> CGRect? {
@@ -139,6 +147,11 @@ public final class SettingsWindowController: NSWindowController {
 			return nil
 		}
 		return NSRectFromString(frameString)
+	}
+
+	/// Returns true if the given point is within the visible frame of any connected screen.
+	private static func isPointOnScreen(_ point: CGPoint) -> Bool {
+		NSScreen.screens.contains { $0.visibleFrame.contains(point) }
 	}
 }
 
