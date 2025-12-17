@@ -212,6 +212,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 				)
 			}, completionHandler: nil)
 		} else {
+			setWindowFrame(for: toViewController, animated: false)
 			super.transition(
 				from: fromViewController,
 				to: toViewController,
