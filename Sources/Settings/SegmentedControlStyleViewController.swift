@@ -87,6 +87,9 @@ final class SegmentedControlStyleViewController: NSViewController, SettingsStyle
 	}
 
 	@IBAction private func segmentedControlAction(_ control: NSSegmentedControl) {
+		guard control.selectedSegment >= 0 else {
+			return
+		}
 		delegate?.activateTab(index: control.selectedSegment, animated: true)
 	}
 
