@@ -5,6 +5,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 	private var panes = [SettingsPane]()
 	private var style: Settings.Style?
 	internal var settingsPanesCount: Int { panes.count }
+	/// Configured in `configure(panes:style:)`. Must not be accessed before configuration.
 	private var settingsStyleController: SettingsStyleController!
 	private var isKeepingWindowCentered: Bool { settingsStyleController.isKeepingWindowCentered }
 
