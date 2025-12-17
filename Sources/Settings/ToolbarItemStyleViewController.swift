@@ -1,4 +1,4 @@
-import Cocoa
+import AppKit
 
 final class ToolbarItemStyleViewController: NSObject, SettingsStyleController {
 	let toolbar: NSToolbar

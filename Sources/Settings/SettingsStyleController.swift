@@ -1,4 +1,4 @@
-import Cocoa
+import AppKit
 
 /**
 Protocol for implementing different tab selection styles in the settings window.
