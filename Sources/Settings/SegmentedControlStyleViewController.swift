@@ -91,6 +91,10 @@ final class SegmentedControlStyleViewController: NSViewController, SettingsStyle
 	}
 
 	func selectTab(index: Int) {
+		guard index >= 0, index < panes.count else {
+			assertionFailure("Tab index \(index) out of bounds (0..<\(panes.count))")
+			return
+		}
 		segmentedControl.selectedSegment = index
 	}
 
