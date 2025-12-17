@@ -12,7 +12,11 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 		settingsStyleController?.toolbarItemIdentifiers() ?? []
 	}
 
-	var window: NSWindow! { view.window }
+	var window: NSWindow? { view.window }
+
+	private var pausableWindow: UserInteractionPausableWindow? {
+		window as? UserInteractionPausableWindow
+	}
 
 	var isAnimated = true
 
@@ -53,6 +57,9 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 		settingsStyleController.delegate = self
 
 		// Called last so that `settingsStyleController` can be asked for items.
+		guard let window else {
+			preconditionFailure("Window must exist when configuring panes")
+		}
 		window.toolbar = toolbar
 	}
 
@@ -89,7 +96,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 	}
 
 	private func updateWindowTitle(tabIndex: Int) {
-		window.title = {
+		window?.title = {
 			if panes.count > 1 {
 				return panes[tabIndex].paneTitle
 			} else {
@@ -173,6 +180,8 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 		])
 
 		if isAnimated {
+			pausableWindow?.isUserInteractionEnabled = false
+
 			NSAnimationContext.runAnimationGroup({ context in
 				context.allowsImplicitAnimation = true
 				context.duration = 0.25
@@ -185,7 +194,9 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 					options: options,
 					completionHandler: completion
 				)
-			}, completionHandler: nil)
+			}, completionHandler: { [weak self] in
+				self?.pausableWindow?.isUserInteractionEnabled = true
+			})
 		} else {
 			super.transition(
 				from: fromViewController,
@@ -198,7 +209,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 
 	private func setWindowFrame(for viewController: NSViewController, animated: Bool = false) {
 		guard let window else {
-			preconditionFailure()
+			preconditionFailure("Window must exist when setting frame")
 		}
 
 		let contentSize = viewController.view.fittingSize
