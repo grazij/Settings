@@ -39,7 +39,7 @@ final class SegmentedControlStyleViewController: NSViewController, SettingsStyle
 	fileprivate func createSegmentedControl(panes: [SettingsPane]) -> NSSegmentedControl {
 		let segmentedControl = NSSegmentedControl()
 		segmentedControl.segmentCount = panes.count
-		segmentedControl.segmentStyle = .texturedSquare
+		segmentedControl.segmentStyle = .automatic
 		segmentedControl.target = self
 		segmentedControl.action = #selector(segmentedControlAction)
 		segmentedControl.identifier = .toolbarSegmentedControl
