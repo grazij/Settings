@@ -1,7 +1,7 @@
 import AppKit
 
 extension Settings {
-	public struct PaneIdentifier: Hashable, RawRepresentable, Codable {
+	public struct PaneIdentifier: Hashable, RawRepresentable, Codable, Sendable {
 		public let rawValue: String
 
 		public init(rawValue: String) {
