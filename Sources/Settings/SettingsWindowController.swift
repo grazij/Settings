@@ -117,8 +117,9 @@ public final class SettingsWindowController: NSWindowController {
 			return
 		}
 
-		window.center()
-		window.setFrameUsingName(.settings)
+		if !window.setFrameUsingName(.settings) {
+			window.center()
+		}
 		window.setFrameAutosaveName(.settings)
 	}
 }
