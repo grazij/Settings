@@ -34,6 +34,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 	}
 
 	func configure(panes: [SettingsPane], style: Settings.Style) {
+		precondition(!panes.isEmpty, "Settings requires at least one pane")
 		self.panes = panes
 		self.style = style
 		children = panes
