@@ -6,6 +6,7 @@ extension NSWindow.FrameAutosaveName {
 
 public final class SettingsWindowController: NSWindowController {
 	private let tabViewController = SettingsTabViewController()
+	private var hasRegisteredFrameAutosave = false
 
 	public var isAnimated: Bool {
 		get { tabViewController.isAnimated }
@@ -64,7 +65,6 @@ public final class SettingsWindowController: NSWindowController {
 		tabViewController.isAnimated = animated
 		tabViewController.configure(panes: panes, style: style)
 		updateToolbarVisibility()
-		window.setFrameAutosaveName(.settings)
 	}
 
 	@available(*, unavailable)
@@ -111,6 +111,14 @@ public final class SettingsWindowController: NSWindowController {
 
 		restoreWindowPosition()
 		showWindow(self)
+
+		// Register for frame autosave after window is visible and positioned.
+		// Done here (not in init) to prevent AppKit's deferred restoration
+		// from overwriting our manual positioning.
+		if !hasRegisteredFrameAutosave {
+			window?.setFrameAutosaveName(.settings)
+			hasRegisteredFrameAutosave = true
+		}
 	}
 
 	private func restoreWindowPosition() {
