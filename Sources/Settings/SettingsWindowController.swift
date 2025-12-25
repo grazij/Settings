@@ -200,6 +200,15 @@ extension SettingsWindowController {
 	}
 }
 
-private final class SettingsWindow: UserInteractionPausableWindow {
+private final class SettingsWindow: NSWindow {
 	override var canBecomeMain: Bool { false }
+
+	override func responds(to selector: Selector!) -> Bool {
+		// Deactivate toolbar interactions from the Main Menu.
+		if selector == #selector(NSWindow.toggleToolbarShown(_:)) {
+			return false
+		}
+
+		return super.responds(to: selector)
+	}
 }

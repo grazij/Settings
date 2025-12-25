@@ -26,42 +26,6 @@ extension NSView {
 	}
 }
 
-extension NSEvent {
-	/**
-	Events triggered by user interaction.
-	*/
-	static let userInteractionEvents: [EventType] = [
-		.leftMouseDown,
-		.leftMouseUp,
-		.rightMouseDown,
-		.rightMouseUp,
-		.leftMouseDragged,
-		.rightMouseDragged,
-		.keyDown,
-		.keyUp,
-		.scrollWheel,
-		.tabletPoint,
-		.otherMouseDown,
-		.otherMouseUp,
-		.otherMouseDragged,
-		.gesture,
-		.magnify,
-		.swipe,
-		.rotate,
-		.beginGesture,
-		.endGesture,
-		.smartMagnify,
-		.pressure,
-		.quickLook,
-		.directTouch
-	]
-
-	/**
-	Whether the event was triggered by user interaction.
-	*/
-	var isUserInteraction: Bool { Self.userInteractionEvents.contains(type) }
-}
-
 extension Bundle {
 	var appName: String {
 		string(forInfoDictionaryKey: "CFBundleDisplayName")
@@ -75,34 +39,6 @@ extension Bundle {
 		object(forInfoDictionaryKey: key) as? String
 	}
 }
-
-
-/**
-A window that allows you to disable all user interactions via `isUserInteractionEnabled`.
-
-Used to avoid breaking animations when the user clicks too fast. Disable user interactions during animations and you're set.
-*/
-class UserInteractionPausableWindow: NSWindow { // swiftlint:disable:this final_class
-	var isUserInteractionEnabled = true
-
-	override func sendEvent(_ event: NSEvent) {
-		guard isUserInteractionEnabled || !event.isUserInteraction else {
-			return
-		}
-
-		super.sendEvent(event)
-	}
-
-	override func responds(to selector: Selector!) -> Bool {
-		// Deactivate toolbar interactions from the Main Menu.
-		if selector == #selector(NSWindow.toggleToolbarShown(_:)) {
-			return false
-		}
-
-		return super.responds(to: selector)
-	}
-}
-
 
 @available(macOS 10.15, *)
 extension View {

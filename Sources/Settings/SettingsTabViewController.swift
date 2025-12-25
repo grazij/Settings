@@ -8,16 +8,13 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 	/// Configured in `configure(panes:style:)`. Must not be accessed before configuration.
 	private var settingsStyleController: SettingsStyleController!
 	private var isKeepingWindowCentered: Bool { settingsStyleController.isKeepingWindowCentered }
+	private var isTransitioning = false
 
 	private var toolbarItemIdentifiers: [NSToolbarItem.Identifier] {
 		settingsStyleController?.toolbarItemIdentifiers() ?? []
 	}
 
 	var window: NSWindow? { view.window }
-
-	private var pausableWindow: UserInteractionPausableWindow? {
-		window as? UserInteractionPausableWindow
-	}
 
 	var isAnimated = true
 
@@ -74,6 +71,10 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 	}
 
 	func activateTab(index: Int, animated: Bool) {
+		guard !(isTransitioning && animated) else {
+			return
+		}
+
 		guard index >= 0, index < panes.count else {
 			assertionFailure("Tab index \(index) out of bounds (0..<\(panes.count))")
 			return
@@ -193,7 +194,7 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 		])
 
 		if isAnimated {
-			pausableWindow?.isUserInteractionEnabled = false
+			isTransitioning = true
 
 			NSAnimationContext.runAnimationGroup({ context in
 				context.allowsImplicitAnimation = true
@@ -204,12 +205,11 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 				super.transition(
 					from: fromViewController,
 					to: toViewController,
-					options: options,
-					completionHandler: { [weak self] in
-						completion?()
-						self?.pausableWindow?.isUserInteractionEnabled = true
-					}
-				)
+					options: options
+				) { [weak self] in
+					completion?()
+					self?.isTransitioning = false
+				}
 			}, completionHandler: nil)
 		} else {
 			setWindowFrame(for: toViewController, animated: false)
