@@ -196,11 +196,15 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 		if isAnimated {
 			isTransitioning = true
 
+			// Calculate size before animation context to avoid layout recursion
+			// when SwiftUI's NSHostingController measures its content.
+			let contentSize = toViewController.view.fittingSize
+
 			NSAnimationContext.runAnimationGroup({ context in
 				context.allowsImplicitAnimation = true
 				context.duration = 0.25
 				context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-				setWindowFrame(for: toViewController, animated: true)
+				setWindowFrame(for: toViewController, animated: true, contentSize: contentSize)
 
 				super.transition(
 					from: fromViewController,
@@ -222,12 +226,12 @@ final class SettingsTabViewController: NSViewController, SettingsStyleController
 		}
 	}
 
-	private func setWindowFrame(for viewController: NSViewController, animated: Bool = false) {
+	private func setWindowFrame(for viewController: NSViewController, animated: Bool = false, contentSize: CGSize? = nil) {
 		guard let window else {
 			preconditionFailure("Window must exist when setting frame")
 		}
 
-		let contentSize = viewController.view.fittingSize
+		let contentSize = contentSize ?? viewController.view.fittingSize
 
 		let newWindowSize = window.frameRect(forContentRect: CGRect(origin: .zero, size: contentSize)).size
 		var frame = window.frame
